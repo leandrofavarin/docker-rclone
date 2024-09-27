@@ -1,7 +1,8 @@
 name: Build and push Docker image
 on:
   push:
-
+    branches:
+      - $default-branch
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -39,5 +40,5 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm/v6,linux/arm/v7
           push: true
           tags: |
-            ghcr.io/${{ env.GITOWNER }}/rclone:latest
-            ghcr.io/${{ env.GITOWNER }}/rclone:${{ env.RELEASE_DATE }}
+            ghcr.io/${{ env.GITOWNER }}/docker-rclone:latest
+            ghcr.io/${{ env.GITOWNER }}/docker-rclone:${{ env.RELEASE_DATE }}

@@ -5,7 +5,6 @@ LABEL maintainer="leandrofavarin"
 
 ARG TARGETPLATFORM
 ARG RCLONE_VERSION=current
-# ARG ARCH=amd64
 ENV SYNC_SRC=
 ENV SYNC_DEST=
 ENV SYNC_OPTS=-v
