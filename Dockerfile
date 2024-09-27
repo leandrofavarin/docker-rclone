@@ -1,10 +1,11 @@
 ARG BASE=alpine:latest
 FROM ${BASE}
 
-LABEL maintainer="pfidr"
+LABEL maintainer="leandrofavarin"
 
+ARG TARGETPLATFORM
 ARG RCLONE_VERSION=current
-ARG ARCH=amd64
+# ARG ARCH=amd64
 ENV SYNC_SRC=
 ENV SYNC_DEST=
 ENV SYNC_OPTS=-v
@@ -28,14 +29,22 @@ ENV UID=
 ENV GID=
 ENV SUCCESS_CODES="0"
 
+RUN echo "Building for platform: $TARGETPLATFORM"
+
 RUN apk --no-cache add ca-certificates fuse wget dcron tzdata
 
-RUN URL=http://downloads.rclone.org/${RCLONE_VERSION}/rclone-${RCLONE_VERSION}-linux-${ARCH}.zip ; \
+# Extract and transform Docker's TARGETPLATFORM to how rclone suffixes its binaries
+RUN ARCH=$(echo ${TARGETPLATFORM} | sed 's/\//-/g') && \
+    echo "Extracted architecture: $ARCH" && \
+    echo $ARCH > /tmp/arch.txt
+
+RUN ARCH=$(cat /tmp/arch.txt) ; \
+  URL=http://downloads.rclone.org/${RCLONE_VERSION}/rclone-${RCLONE_VERSION}-${ARCH}.zip ; \
   URL=${URL/\/current/} ; \
   cd /tmp \
   && wget -q $URL \
-  && unzip /tmp/rclone-${RCLONE_VERSION}-linux-${ARCH}.zip \
-  && mv /tmp/rclone-*-linux-${ARCH}/rclone /usr/bin \
+  && unzip /tmp/rclone-${RCLONE_VERSION}-${ARCH}.zip \
+  && mv /tmp/rclone-*-${ARCH}/rclone /usr/bin \
   && rm -r /tmp/rclone*
 
 COPY entrypoint.sh /
