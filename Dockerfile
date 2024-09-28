@@ -38,7 +38,7 @@ RUN ARCH=$(echo ${TARGETPLATFORM} | sed 's/\//-/g') && \
     echo $ARCH > /tmp/arch.txt
 
 RUN ARCH=$(cat /tmp/arch.txt) ; \
-  URL=http://downloads.rclone.org/${RCLONE_VERSION}/rclone-${RCLONE_VERSION}-${ARCH}.zip ; \
+  URL=https://downloads.rclone.org/${RCLONE_VERSION}/rclone-${RCLONE_VERSION}-${ARCH}.zip ; \
   URL=${URL/\/current/} ; \
   cd /tmp \
   && wget -q $URL \

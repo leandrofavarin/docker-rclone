@@ -1,3 +1,5 @@
+Copyright 2024 Leandro Favarin
+
 Copyright 2019 Pfidr34
 
 Copyright 2017 Brian J. Cardiff

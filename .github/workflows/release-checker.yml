@@ -1,0 +1,29 @@
+name: Release Checker
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # midnights
+
+jobs:
+  Release-Checker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch latest release version
+        id: fetch-release
+        run: |
+          curl -s https://api.github.com/repos/rclone/rclone/releases/latest | jq -r ".tag_name" > release-versions/latest.txt
+          echo ::set-output name=success::$([ "$(cat release-versions/latest.txt)" == 'null' ] && echo "false" || echo "true")
+
+      - name: Check for modified files
+        id: git-check
+        run: echo ::set-output name=modified::$([ -z "`git status --porcelain`" ] && echo "false" || echo "true")
+
+      - name: Commit latest release version
+        if: |
+          steps.fetch-release.outputs.success == 'true' &&
+          steps.git-check.outputs.modified == 'true'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -am "Release: v$(cat release-versions/latest.txt)"
+          git push

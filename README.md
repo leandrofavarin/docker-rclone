@@ -2,6 +2,8 @@
 
 Docker image to perform a [rclone](http://rclone.org) sync based on a cron schedule, with [healthchecks.io](https://healthchecks.io) monitoring.
 
+Forked from [pfidr34/docker-rclone](https://github.com/pfidr34/docker-rclone).
+
 rclone is a command line program to sync files and directories to and from:
 
 * Google Drive
@@ -32,7 +34,7 @@ A first run of the container can help in the creation of the file, but feel free
 
 ```
 $ mkdir config
-$ docker run --rm -it -v $(pwd)/config:/config pfidr/rclone
+$ docker run --rm -it -v $(pwd)/config:/config ghcr.io/leandrofavarin/docker-rclone
 ```
 
 ### Perform sync in a daily basis
@@ -64,106 +66,10 @@ A few environment variables allow you to customize the behavior of rclone:
 **When using UID/GID the config and/or logs directory must be writeable by this UID**
 
 ```bash
-$ docker run --rm -it -v $(pwd)/config:/config -v /path/to/source:/source -e SYNC_SRC="/source" -e SYNC_DEST="dest:path" -e TZ="America/Chicago" -e CRON="0 0 * * *" -e CRON_ABORT="0 6 * * *" -e FORCE_SYNC=1 -e CHECK_URL=https://hchk.io/hchk_uuid pfidr/rclone
+$ docker run --rm -it -v $(pwd)/config:/config -v /path/to/source:/source -e SYNC_SRC="/source" -e SYNC_DEST="dest:path" -e TZ="America/Chicago" -e CRON="0 0 * * *" -e CRON_ABORT="0 6 * * *" -e FORCE_SYNC=1 -e CHECK_URL=https://hchk.io/hchk_uuid ghcr.io/leandrofavarin/docker-rclone
 ```
 
 See [rclone sync docs](https://rclone.org/commands/rclone_sync/) for source/dest syntax and additional options.
-
-## Changelog
-
-+ **09/03/2024:**
-  * Update to latest Rclone (v1.67.0)
-+ **07/06/2023:**
-  * Update to latest Rclone (v1.63.0)
-+ **07/18/2022:**
-  * Update to latest Rclone (v1.59.0)
-+ **04/25/2022:**
-  * Display exit code in console output
-  * Fix issue with healthcheck
-  * Update to latest Rclone (v1.58.0)
-+ **11/18/2021:**
-  * Update to latest Rclone (v1.57.0)
-+ **10/04/2021:**
-  * Update to latest Rclone (v1.56.2)
-+ **09/27/2021:**
-  * Update to latest Rclone (v1.56.1)
-+ **08/25/2021:**
-  * Update to latest Rclone (v1.56.0)
-+ **06/25/2021:**
-  * Update to latest Rclone (v1.55.1)
-+ **06/25/2021:**
-  * Update to latest Rclone (v1.55.0)
-+ **03/10/2021:**
-  * Update to latest Rclone (v1.54.1)
-+ **02/04/2021:**
-  * Update to latest Rclone (v1.54.0)
-+ **01/22/2021:**
-  * Update to latest Rclone (v1.53.4)
-+ **11/23/2020:**
-  * Update to latest Rclone (v1.53.3)
-+ **10/28/2020:**
-  * Update to latest Rclone (v1.53.2)
-+ **09/13/2020:**
-  * Update to latest Rclone (v1.53.1)
-+ **09/05/2020:**
-  * Update to latest Rclone (v1.53.0)
-+ **08/31/2020:**
-  * Add ability to send log data to healthchecks.io - See `HC_LOG` environment variable
-+ **08/20/2020:**
-  * Update to latest Rclone (v1.52.3)
-+ **06/25/2020:**
-  * Update to latest Rclone (v1.52.2)
-+ **06/11/2020:**
-  * Update to latest Rclone (v1.52.1)
-+ **05/28/2020:**
-  * Eval the entire rclone command
-  * Modify how rclone errors are interpreted when checking if source directory is empty
-+ **05/27/2020:**
-  * Update to latest Rclone (v1.52.0)
-  * Add `RCLONE_DIR_CMD_DEPTH` option to declare recursion depth when checking if `SYNC_SRC` is empty
-  * Move call to signal start of healthchecks.io further up in the sync process
-  * Change when logs are deleted to make sure an active log is not deleted
-+ **05/18/2020:**
-  * Modify how rclone errors are interpreted when passing results to healthchecks.io
-+ **05/17/2020:**
-  * Handle spaces in `SYNC_SRC` and `SYNC_DEST`
-+ **02/01/2020:**
-  * Update to latest Rclone (v1.51.0)
-+ **11/20/2019:**
-  * Update to latest Rclone (v1.50.2)
-+ **11/18/2019:**
-  * Add support for UID/GID
-+ **11/06/2019:**
-  * Update to latest Rclone (v1.50.1)
-+ **10/27/2019:**
-  * Update to latest Rclone (v1.50.0)
-+ **10/07/2019:**
-  * Update to latest Rclone (v1.49.5)
-+ **10/01/2019:**
-  * Update to latest Rclone (v1.49.4)
-+ **09/23/2019:**
-  * Add environment variable SYNC_ONCE
-+ **09/19/2019:**
-  * Add environment variable SYNC_OPTS_EVAL
-+ **09/17/2019:**
-  * Update to latest Rclone (v1.49.3)
-+ **09/10/2019:**
-  * Regression on log rotation 
-+ **09/09/2019:**
-  * Update to latest Rclone (v1.49.2)
-+ **08/29/2019:**
-  * Update to latest Rclone (v1.49.1)
-+ **08/20/2019:**
-  * Add start command for healthchecks.io calls
-  * Add debug messages for healthchecks.io calls
-+ **08/19/2019:**
-  * Correct log rotation when there are no logs
-+ **07/18/2019:**
-  * Optimizations to dockerfile
-+ **06/22/2019:**
-  * Update to latest Rclone (v1.48.0)
-+ **05/01/2019:**
-  * Initial release
 
 <br />
 <br />
