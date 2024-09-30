@@ -8,15 +8,19 @@ jobs:
   Release-Checker:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.REPO_SCOPED_TOKEN }}
+
       - name: Fetch latest release version
         id: fetch-release
         run: |
           curl -s https://api.github.com/repos/rclone/rclone/releases/latest | jq -r ".tag_name" > release-versions/latest.txt
-          echo ::set-output name=success::$([ "$(cat release-versions/latest.txt)" == 'null' ] && echo "false" || echo "true")
+          echo "success=$(test \"$(cat release-versions/latest.txt)\" != 'null' && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
 
       - name: Check for modified files
         id: git-check
-        run: echo ::set-output name=modified::$([ -z "`git status --porcelain`" ] && echo "false" || echo "true")
+        run: echo "modified=$([ -z "$(git status --porcelain)" ] && echo 'false' || echo 'true')" >> $GITHUB_OUTPUT
 
       - name: Commit latest release version
         if: |
