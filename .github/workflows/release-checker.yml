@@ -2,13 +2,13 @@ name: Release Checker
 
 on:
   schedule:
-    - cron: '0 0 * * *' # midnights
+    - cron: '*/5 * * * *' # midnights
 
 jobs:
   Release-Checker:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           token: ${{ secrets.REPO_SCOPED_TOKEN }}
 
@@ -22,7 +22,7 @@ jobs:
         id: git-check
         run: echo "modified=$([ -z "$(git status --porcelain)" ] && echo 'false' || echo 'true')" >> $GITHUB_OUTPUT
 
-      - name: Commit latest release version
+      - name: Commit & push latest release version
         if: |
           steps.fetch-release.outputs.success == 'true' &&
           steps.git-check.outputs.modified == 'true'
